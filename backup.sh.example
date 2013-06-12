@@ -12,7 +12,7 @@ MYSQL_BACKUP_DIR=/home/seb/backups/mysql
 BACKUP_SCRIPT=/home/seb/projects/backup_tools/s3-backup.py
 BACKUP_DIR=/home/seb/backups/projects
 
-NOW=$(date +"%d-%m-%Y-%H:%M:%S")
+NOW=$(date +"%Y-%m-%d-%H:%M:%S")
 
 echo 'Backup mysql'
 python $MYSQL_BACKUP_SCRIPT >>$MYSQL_BACKUP_DIR/$NOW-backup.log 2>>$MYSQL_BACKUP_DIR/$NOW-backup.err.log
