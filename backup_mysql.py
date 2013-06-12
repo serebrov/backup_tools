@@ -28,7 +28,7 @@ username = config.get('client', 'user')
 password = config.get('client', 'password')
 hostname = config.get('client', 'host')
 
-filestamp = time.strftime('%Y-%m-%d')
+filestamp = time.strftime('%Y-%m-%d-%H-%M-%S')
 
 # Get a list of databases with :
 database_list_command="mysql -u %s -p%s -h %s --silent -N -e 'show databases'" % (username, password, hostname)
@@ -38,7 +38,7 @@ for database in os.popen(database_list_command).readlines():
         continue
     if database == 'performance_schema':
         continue
-    filename = "~/backups/mysql/%s-%s.sql" % (database, filestamp)
+    filename = "~/backups/mysql/%s-%s.sql" % (filestamp, database)
     os.popen("mysqldump -u %s -p%s -h %s -e --opt -c %s | gzip -c > %s.gz" % (username, password, hostname, database, filename))
 # todo check options below
 # cmd="mysqldump -u "+user+" -h "+host+" -p"+passwd+" --opt --routines --flush-privileges --single-transaction --database "+result[0]+" | gzip -9 --rsyncable > yourlocation/"+backupfile
