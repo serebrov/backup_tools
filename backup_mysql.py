@@ -19,6 +19,7 @@ import time
 
 # todo
 # add config and use it instead of /etc/mysql/debian.cnf
+# make backup dir configurable
 # the script can be lauched then without sudo
 
 # On Debian, /etc/mysql/debian.cnf contains 'root' a like login and password.
@@ -28,7 +29,7 @@ username = config.get('client', 'user')
 password = config.get('client', 'password')
 hostname = config.get('client', 'host')
 
-filestamp = time.strftime('%Y-%m-%d-%H-%M-%S')
+filestamp = time.strftime('%Y-%m-%d-%H:%M:%S')
 
 # Get a list of databases with :
 database_list_command="mysql -u %s -p%s -h %s --silent -N -e 'show databases'" % (username, password, hostname)

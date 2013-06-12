@@ -1,0 +1,30 @@
+#!/bin/sh
+
+# example for master backup script
+# to add it to cron:
+#   $ sudo crontab -e
+#   @midnight /home/seb/backups/backup.sh >/home/seb/backups/backup.log 2>/home/seb/backups/backup.err.log 
+
+SCRIPT_PATH=`dirname $0`
+MYSQL_BACKUP_SCRIPT=/home/seb/projects/backup_tools/backup_mysql.py
+MYSQL_BACKUP_DIR=/home/seb/backups/mysql
+
+BACKUP_SCRIPT=/home/seb/projects/backup_tools/s3-backup.py
+BACKUP_DIR=/home/seb/backups/projects
+
+NOW=$(date +"%d-%m-%Y-%H:%M:%S")
+
+echo 'Backup mysql'
+python $MYSQL_BACKUP_SCRIPT >>$MYSQL_BACKUP_DIR/$NOW-backup.log 2>>$MYSQL_BACKUP_DIR/$NOW-backup.err.log
+
+PROJECT=/home/seb/web/sugar
+NUM_BACKUPS=30
+echo 'Backup sugar'
+python $BACKUP_SCRIPT --num-backups=$NUM_BACKUPS $PROJECT $BACKUP_DIR >>$BACKUP_DIR/$NOW-backup.log 2>>$BACKUP_DIR/$NOW-backup.err.log
+
+PROJECT=/home/seb/web/redmine
+NUM_BACKUPS=10
+echo 'Backup redmine'
+python $BACKUP_SCRIPT --num-backups=$NUM_BACKUPS $PROJECT $BACKUP_DIR >>$BACKUP_DIR/$NOW-backup.log 2>>$BACKUP_DIR/$NOW-backup.err.log
+
+echo 'Done'

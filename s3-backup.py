@@ -3,7 +3,7 @@
 #
 #  s3-backup.py: perform a backup of a path
 #
-# Based on hot-backup.py   
+# Based on hot-backup.py
 
 ######################################################################
 
@@ -75,7 +75,7 @@ Options:
                          zip : Creates a compressed zip file.
   --num-backups=N      Number of prior backups to keep around (0 to keep all).
   --help      -h       Print this help message and exit.
-  
+
 S3 Options (requires boto):
   --bucket=string      S3 bucket to use for backups (required when using s3 backup)
   --aws-key=key        Your AWS Access Key ID (default is to read the key from the environment)
@@ -112,18 +112,18 @@ for o, a in opts:
     sys.exit()
   elif o == "--bucket":
     s3bucket = a
-    
+
     # set the default archive_type
     if archive_type is None:
       archive_type = 'gz'
-    
+
     try:
       import boto
     except ImportError, e:
       sys.stderr.write("ERROR: %s\n\n" %e)
       sys.stderr.flush()
       usage(sys.stderr)
-      sys.exit(2)      
+      sys.exit(2)
   elif o == "--aws-key":
     s3aws_key = a
   elif o == "--aws-secret":
@@ -144,10 +144,10 @@ if s3bucket is not None:
     s3connection = S3Connection()
   else:
     s3connection = S3Connection(s3aws_key,s3aws_secret)
-  
+
   try:
     bucket = s3connection.create_bucket(s3bucket)
-  except Exception, e:    
+  except Exception, e:
     sys.stderr.write("ERROR: %s\n" % e)
 
     rs = s3connection.get_all_buckets()
@@ -155,7 +155,7 @@ if s3bucket is not None:
     sys.stderr.write("\nUse an available bucket or create a new one.\nAvailable buckets:\n\n")
     for b in rs:
       sys.stderr.write("     %s" % b.name)
-      
+
     sys.stderr.flush()
     sys.exit(1)
 
@@ -234,18 +234,18 @@ if archive_type:
   elif archive_type == 'zip':
     try:
       import zipfile
-      
+
       def add_to_zip(baton, dirname, names):
         zp = baton[0]
         root = os.path.join(baton[1], '')
-        
+
         for file in names:
           path = os.path.join(dirname, file)
           if os.path.isfile(path):
             zp.write(path, path[len(root):])
           elif os.path.isdir(path) and os.path.islink(path):
             os.path.walk(path, add_to_zip, (zp, path))
-            
+
       zp = zipfile.ZipFile(archive_path, 'w', zipfile.ZIP_DEFLATED)
       os.path.walk(project_dir, add_to_zip, (zp, project_dir))
       zp.close()
@@ -263,13 +263,13 @@ if archive_type:
     sys.exit(err_code)
   else:
     print("Archive created...")
-  
+
   if bucket:
     print("Uploading %s to S3..." % archive_path)
     from boto.s3.key import Key
     k = Key(bucket,name=os.path.basename(archive_path))
     k.set_contents_from_filename(archive_path)
-    
+
     if remove_local:
       print("Removing local copy of %s..." % archive_path)
       os.remove(archive_path)
@@ -279,7 +279,7 @@ if archive_type:
 
 if num_backups > 0:
   regexp = re.compile("^" + project + "-\d{4}-\d{2}-\d{2}-\d{2}:\d{2}:\d{2}" + ext_re + "$")
-  
+
   directory_list = os.listdir(backup_dir)
   old_list = [x for x in directory_list if regexp.search(x)]
   old_list.sort(comparator)
@@ -291,7 +291,7 @@ if num_backups > 0:
       safe_rmtree(old_backup_item, 1)
     else:
       os.remove(old_backup_item)
-      
+
   if bucket:
     # remove extra copies from s3 also
     old_list = [x for x in bucket.list() if regexp.search(x.name)]
@@ -300,4 +300,4 @@ if num_backups > 0:
   for item in old_list:
     print("Removing old S3 backup: " + item.key)
     item.delete()
-    
+
