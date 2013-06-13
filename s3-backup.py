@@ -206,9 +206,10 @@ print("Beginning backup of '"+ project_dir + "'.")
 
 ### Step 2: Find next available backup path
 
-timestamp = datetime.datetime.utcnow().strftime('%Y-%m-%d-%H:%M:%S')
+#timestamp = datetime.datetime.utcnow().strftime('%Y-%m-%d-%H:%M:%S')
+timestamp = time.strftime('%Y-%m-%d-%H:%M:%S')
 
-backup_subdir = os.path.join(backup_dir, project + "-" + timestamp)
+backup_subdir = os.path.join(backup_dir,  timestamp + "-" + project)
 
 
 ### Step 4: Make an archive of the backup if required.
@@ -278,7 +279,7 @@ if archive_type:
 ###         NUM_BACKUPS.
 
 if num_backups > 0:
-  regexp = re.compile("^" + project + "-\d{4}-\d{2}-\d{2}-\d{2}:\d{2}:\d{2}" + ext_re + "$")
+  regexp = re.compile("^" + "d{4}-\d{2}-\d{2}-\d{2}:\d{2}:\d{2}-" + project + ext_re + "$")
 
   directory_list = os.listdir(backup_dir)
   old_list = [x for x in directory_list if regexp.search(x)]

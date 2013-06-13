@@ -1,0 +1,8 @@
+[backup]
+dir=/home/seb/backups/mysql
+
+[mysql]
+#note: it is more safe to pass mysql params as command line arguments
+user=backup
+password=backup
+host=localhost
