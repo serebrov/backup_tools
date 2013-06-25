@@ -13,6 +13,11 @@ from tasks import backup
 
 #options = environment.options
 
+# resourses
+# http://paver.github.io/paver/
+# https://github.com/paver/paver
+# http://doughellmann.com/2009/01/converting-from-make-to-paver.html
+
 @task
 @cmdopts([
     ('base=', 'b', 'Basename for backup file')
