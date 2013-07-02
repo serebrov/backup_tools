@@ -5,27 +5,28 @@
 #   $ sudo crontab -e
 #   @midnight /home/seb/backups/backup.sh >/home/seb/backups/backup.log 2>/home/seb/backups/backup.err.log 
 
-SCRIPT_PATH=`dirname $0`
-MYSQL_BACKUP_CFG=$SCRIPT_PATH/backup.cfg
-MYSQL_BACKUP_SCRIPT=/home/seb/projects/backup_tools/backup_mysql.py
+PAVER=./paver
 MYSQL_BACKUP_DIR=/home/seb/backups/mysql
-
-BACKUP_SCRIPT=/home/seb/projects/backup_tools/s3-backup.py
 BACKUP_DIR=/home/seb/backups/projects
 
+cd /home/seb/projects/backup_tools
+
 NOW=$(date +"%Y-%m-%d-%H:%M:%S")
+echo $NOW >> $MYSQL_BACKUP_DIR/backup.log
+echo $NOW >> $MYSQL_BACKUP_DIR/backup.err.log
 
 echo 'Backup mysql'
-python $MYSQL_BACKUP_SCRIPT -c $MYSQL_BACKUP_CFG >>$MYSQL_BACKUP_DIR/$NOW-backup.log 2>>$MYSQL_BACKUP_DIR/$NOW-backup.err.log
+$PAVER backup_mysql -u root c -d $MYSQL_BACKUP_DIR >>$MYSQL_BACKUP_DIR/backup.log 2>>$MYSQL_BACKUP_DIR/backup.err.log
+
+echo $NOW >> $BACKUP_DIR/backup.log
+echo $NOW >> $BACKUP_DIR/backup.err.log
 
 PROJECT=/home/seb/web/sugar
-NUM_BACKUPS=30
 echo 'Backup sugar'
-python $BACKUP_SCRIPT --num-backups=$NUM_BACKUPS $PROJECT $BACKUP_DIR >>$BACKUP_DIR/$NOW-backup.log 2>>$BACKUP_DIR/$NOW-backup.err.log
+python $PAVER backup_dir -s $BACKUP_DIR/$PROJECT -d $BACKUP_DIR >>$BACKUP_DIR/backup.log 2>>$BACKUP_DIR/backup.err.log
 
 PROJECT=/home/seb/web/redmine
-NUM_BACKUPS=10
 echo 'Backup redmine'
-python $BACKUP_SCRIPT --num-backups=$NUM_BACKUPS $PROJECT $BACKUP_DIR >>$BACKUP_DIR/$NOW-backup.log 2>>$BACKUP_DIR/$NOW-backup.err.log
+python $PAVER backup_dir -s $BACKUP_DIR/$PROJECT -d $BACKUP_DIR >>$BACKUP_DIR/backup.log 2>>$BACKUP_DIR/backup.err.log
 
 echo 'Done'

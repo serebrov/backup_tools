@@ -52,7 +52,7 @@ def backup_mysql(options):
          arc = archive.compress()
          backup.rm_file(dump)
          ext = archive.archive_map[options.archive_type]
-         backup.rm_old_files(options.dest, db, ext, 64)
+         backup.rm_old_files(options.dest, db, ext, 28)
 
 
 @task
@@ -68,4 +68,4 @@ def backup_dir(options):
         options.name = os.path.basename(options.src)
     arc = archive.compress()
     ext = archive.archive_map[options.archive_type]
-    backup.rm_old_files(options.dest, options.name, ext, 4)
+    backup.rm_old_files(options.dest, options.name, ext, 28)
