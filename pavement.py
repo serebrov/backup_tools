@@ -37,7 +37,7 @@ def backup_file_name(options):
     optparse.make_option('-u', '--mysql_user', help='Mysql user name'),
     optparse.make_option('-p', '--mysql_password', default='', help='Mysql user password'),
     optparse.make_option('--host', default='localhost', help='Mysql host'),
-    optparse.make_option('-d', '--dest', default='', help='Dump file destination'),
+    optparse.make_option('-d', '--dest', help='Dump file destination'),
     optparse.make_option('--archive_type', default='gz', help='Archive type: gz, bz2 or zip'),
     optparse.make_option('--name', default='backup', help='Backup file name'),
 ])

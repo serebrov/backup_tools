@@ -11,22 +11,15 @@ BACKUP_DIR=/home/seb/backups/projects
 
 cd /home/seb/projects/backup_tools
 
-NOW=$(date +"%Y-%m-%d-%H:%M:%S")
-echo $NOW >> $MYSQL_BACKUP_DIR/backup.log
-echo $NOW >> $MYSQL_BACKUP_DIR/backup.err.log
-
 echo 'Backup mysql'
-$PAVER backup_mysql -u root c -d $MYSQL_BACKUP_DIR >>$MYSQL_BACKUP_DIR/backup.log 2>>$MYSQL_BACKUP_DIR/backup.err.log
-
-echo $NOW >> $BACKUP_DIR/backup.log
-echo $NOW >> $BACKUP_DIR/backup.err.log
+$PAVER backup_mysql -u root -d $MYSQL_BACKUP_DIR >>$MYSQL_BACKUP_DIR/backup.log 2>>$MYSQL_BACKUP_DIR/backup.err.log
 
 PROJECT=/home/seb/web/sugar
 echo 'Backup sugar'
-python $PAVER backup_dir -s $BACKUP_DIR/$PROJECT -d $BACKUP_DIR >>$BACKUP_DIR/backup.log 2>>$BACKUP_DIR/backup.err.log
+python $PAVER backup_dir -s $PROJECT -d $BACKUP_DIR >>$BACKUP_DIR/backup.log 2>>$BACKUP_DIR/backup.err.log
 
 PROJECT=/home/seb/web/redmine
 echo 'Backup redmine'
-python $PAVER backup_dir -s $BACKUP_DIR/$PROJECT -d $BACKUP_DIR >>$BACKUP_DIR/backup.log 2>>$BACKUP_DIR/backup.err.log
+python $PAVER backup_dir -s $PROJECT -d $BACKUP_DIR >>$BACKUP_DIR/backup.log 2>>$BACKUP_DIR/backup.err.log
 
 echo 'Done'
