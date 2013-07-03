@@ -22,9 +22,9 @@ And a help for a specific command:
 
     $ ./paver mysqldump --help
 
-Examples of top-level tasks which combine base operations to perform a backup are in the main pavement.py file.
+Examples of top-level tasks which combine base operations to perform a backup are in the main [pavement.py](https://github.com/serebrov/backup_tools/blob/master/pavement.py) file.
 
-Also see backup.sh.example for master shell script to launch backup process (it can be used as a cron job):
+Also see [backup.sh.example](https://github.com/serebrov/backup_tools/blob/master/backup.sh.example) for master shell script to launch backup process (it can be used as a cron job):
 
     $ sudo crontab -e
     @midnight /home/seb/backups/backup.sh >/home/seb/backups/backup.log 2>/home/seb/backups/backup.err.log
