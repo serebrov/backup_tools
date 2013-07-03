@@ -17,13 +17,13 @@ archive_map = {
 
 @task
 @cmdopts([
-    optparse.make_option('--archive_type', default='gz', help='Archive type: gz or bz2'),
-    optparse.make_option('--name', default='backup', help='Backup file name'),
+    optparse.make_option('--archive_type', default='gz', help='Archive type: gz or bz2, default is "gz"'),
+    optparse.make_option('--name', default='backup', help='Backup file name, default is "backup"'),
     optparse.make_option('-s', '--src', help='Source file/dir destination'),
     optparse.make_option('-d', '--dest', help='Target archive destination directory')
 ])
-def gz(options):
-    """Archives the file or dir."""
+def compress_gz(options):
+    """Archives a file or a dir into gz/bz2 archive."""
     # ./paver gz --name=test -s ./README.md -d ./
     #print options
     src = os.path.abspath(options.src)
@@ -40,12 +40,12 @@ def gz(options):
 
 @task
 @cmdopts([
-    optparse.make_option('--name', default='backup', help='Backup file name'),
+    optparse.make_option('--name', default='backup', help='Backup file name, default is "backup"'),
     optparse.make_option('-s', '--src', help='Source file/dir destination'),
     optparse.make_option('-d', '--dest', help='Target archive destination directory')
 ])
-def zip(options):
-    """Archives the file or dir."""
+def compress_zip(options):
+    """Archives a file or dir into zip archive."""
     src = os.path.abspath(options.src)
     ext = archive_map['zip']
     dest = os.path.join(os.path.abspath(options.dest), backup.gen_file_name(options.name+ext))
@@ -61,6 +61,7 @@ def zip(options):
     return dest
 
 def add_to_zip(baton, dirname, names):
+    """Helper function to add file to a zip archive."""
     zp = baton[0]
     root = os.path.join(baton[1], '')
 
@@ -73,13 +74,14 @@ def add_to_zip(baton, dirname, names):
 
 @task
 @cmdopts([
-    optparse.make_option('--archive_type', default='gz', help='Archive type: gz or bz2'),
+    optparse.make_option('--archive_type', default='gz', help='Archive type: gz, bz2 or zip, default is "gz"'),
     optparse.make_option('--name', default='backup', help='Backup file name'),
     optparse.make_option('-s', '--src', help='Source file/dir destination'),
     optparse.make_option('-d', '--dest', help='Target archive destination directory')
 ])
 def compress(options):
+    """Archive a file or a dir into gz/bz2/zip archive."""
     if options.archive_type == 'zip':
-        return zip()
+        return compress_zip()
     else:
-        return gz()
+        return compress_gz()

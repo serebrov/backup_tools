@@ -44,16 +44,32 @@ def backup_file_name(options):
 def backup_mysql(options):
     # ./paver backup_mysql -u root -d ./test
     dumps = mysql.mysqldump_all(options)
-    #options['db']=['test']
-    #dumps = mysql.mysqldump(options)
     for db, dump in dumps:
          options['src'] = dump
          options['name'] = db
          arc = archive.compress()
          backup.rm_file(dump)
-         ext = archive.archive_map[options.archive_type]
-         backup.rm_old_files(options.dest, db, ext, 28)
+         backup.rm_old_files(options.dest, db, 28)
 
+@task
+@cmdopts([
+    optparse.make_option('-u', '--mysql_user', help='Mysql user name'),
+    optparse.make_option('-p', '--mysql_password', default='', help='Mysql user password'),
+    optparse.make_option('--host', default='localhost', help='Mysql host'),
+    optparse.make_option('-d', '--dest', help='Dump file destination'),
+    optparse.make_option('--archive_type', default='gz', help='Archive type: gz, bz2 or zip'),
+    optparse.make_option('--name', default='backup', help='Backup file name'),
+])
+def backup_mysql_test(options):
+    # ./paver backup_mysql -u root -d ./test
+    options['db']=['test']
+    dumps = mysql.mysqldump(options)
+    for db, dump in dumps:
+         options['src'] = dump
+         options['name'] = db
+         arc = archive.compress()
+         backup.rm_file(dump)
+         backup.rm_old_files(options.dest, db, 4)
 
 @task
 @cmdopts([
@@ -67,5 +83,4 @@ def backup_dir(options):
     if not options.name:
         options.name = os.path.basename(options.src)
     arc = archive.compress()
-    ext = archive.archive_map[options.archive_type]
-    backup.rm_old_files(options.dest, options.name, ext, 28)
+    backup.rm_old_files(options.dest, options.name, 28)
