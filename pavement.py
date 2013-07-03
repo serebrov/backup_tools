@@ -9,6 +9,7 @@ import time
 from tasks import backup
 from tasks import mysql
 from tasks import archive
+from tasks import encrypt
 
 @task
 @cmdopts([
