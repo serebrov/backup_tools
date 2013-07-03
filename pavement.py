@@ -10,28 +10,6 @@ from tasks import backup
 from tasks import mysql
 from tasks import archive
 
-#import paver.doctools
-#import paver.virtual
-#import paver.misctasks
-#from paver.setuputils import setup
-
-#options = environment.options
-
-# Paver resourses
-# http://paver.github.io/paver/
-# https://github.com/paver/paver
-# http://doughellmann.com/2009/01/converting-from-make-to-paver.html
-
-@task
-@cmdopts([
-    ('base=', 'b', 'Basename for backup file')
-])
-def backup_file_name(options):
-    """ Run as paver backup_file_name --base=test.sql ."""
-    filename = backup.gen_file_name(options.base)
-    print filename
-    return filename
-
 @task
 @cmdopts([
     optparse.make_option('-u', '--mysql_user', help='Mysql user name'),
@@ -42,6 +20,10 @@ def backup_file_name(options):
     optparse.make_option('--name', default='backup', help='Backup file name'),
 ])
 def backup_mysql(options):
+    """Do a mysql backup.
+
+    Dumps all databases, compresses dumps and removes old backups.
+    """
     # ./paver backup_mysql -u root -d ./test
     dumps = mysql.mysqldump_all(options)
     for db, dump in dumps:
@@ -61,6 +43,11 @@ def backup_mysql(options):
     optparse.make_option('--name', default='backup', help='Backup file name'),
 ])
 def backup_mysql_test(options):
+    """Do a test mysql backup.
+
+    The same as backup_mysql, but backups single 'test' database.
+    This task is to do a fast test of the backup_mysql task.
+    """
     # ./paver backup_mysql -u root -d ./test
     options['db']=['test']
     dumps = mysql.mysqldump(options)
@@ -79,6 +66,10 @@ def backup_mysql_test(options):
     optparse.make_option('--name', default='', help='Project name'),
 ])
 def backup_dir(options):
+    """Do a project directory backup.
+
+    Compresses a project directory and removes old backups.
+    """
     # ./paver backup_dir -s /home/user/projects/myproject -d ./test --name myproject
     if not options.name:
         options.name = os.path.basename(options.src)
