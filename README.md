@@ -9,6 +9,7 @@ Supported operations:
 * (archive) Compress a file or a dir into gz/bz2/zip archive
 * (backup) Generate backup file name with current date/time based on specified backup base name
 * (backup) Remove old backups for specified backup base name
+* (encrypt) Encrypt file with gnupg
 
 Each task can be launched separately via paver, for example:
 

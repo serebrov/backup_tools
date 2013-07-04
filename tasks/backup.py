@@ -27,6 +27,7 @@ def rm_file(filename):
     """Removes file. Raises an exception if passed name is not file."""
     if not os.path.isfile(filename):
         raise Exception('Can not remove non-existing file or non-file: ' + filename)
+    print "Remove " + filename
     return os.remove(filename)
 
 def rm_old_files(dirname, basename, num_keep=64, strict=False):

@@ -11,7 +11,7 @@ from paver.easy import *
 @cmdopts([
     optparse.make_option('--trust_model', default='always', help='gpg --trust-model parameter.'),
     optparse.make_option('--recipient', help='gpg --recipient parameter'),
-    optparse.make_option('--user', help='gpg --local-user parameter'),
+    optparse.make_option('--user', default='', help='gpg --local-user parameter'),
     optparse.make_option('-s', '--src', help='Source file/dir destination'),
     optparse.make_option('-d', '--dest', help='Target file destination directory')
 ])
@@ -25,6 +25,10 @@ def gnupg(options):
        This task will invoke gpg command like this:
 
           $ gpg --batch --trust-model always --recipient "Name <name@example.com>" --local-user "Name2 <name2@example.com>" --output file_name.gpg --encrypt file_name
+
+       Where:
+          --batch - execute in batch mode, no interactive questions
+          --trust-model always - always trust keys (you can change it to something more secure, note that task parameter has a slightly different name - 'trust_model'
     """
     # ./paver gnupg --recipient "User <user@example.com>" --user "User <user@example.com>" -s paver -d .
     src = os.path.abspath(options.src)
@@ -32,7 +36,10 @@ def gnupg(options):
     dest = os.path.join(os.path.abspath(options.dest), src_name+'.gpg')
     # do we need to make a file name with timestamp here? Usually we encrypt archive, so timestamp is already present. Maybe add an option?
     #dest = os.path.join(os.path.abspath(options.dest), backup.gen_file_name(src_name+'.gpg'))
-    gpg_command = 'gpg --batch --trust-model %s --recipient "%s" --local-user "%s" --output %s --encrypt %s' % (options.trust_model, options.recipient, options.user, dest, src)
+    user = options.user
+    if user:
+        user = '--local-user "%s"'
+    gpg_command = 'gpg --batch --trust-model %s --recipient "%s" %s --output %s --encrypt %s' % (options.trust_model, options.recipient, user, dest, src)
     sh(gpg_command)
     print dest
     return dest

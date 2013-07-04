@@ -12,14 +12,14 @@ BACKUP_DIR=/home/seb/backups/projects
 cd /home/seb/projects/backup_tools
 
 echo 'Backup mysql'
-$PAVER backup_mysql -u root -d $MYSQL_BACKUP_DIR >>$MYSQL_BACKUP_DIR/backup.log 2>>$MYSQL_BACKUP_DIR/backup.err.log
+$PAVER backup_mysql -u root -d $MYSQL_BACKUP_DIR --recipient "Algo-rithm <info@algo-rithm.com>" >>$MYSQL_BACKUP_DIR/backup.log 2>>$MYSQL_BACKUP_DIR/backup.err.log
 
 PROJECT=/home/seb/web/sugar
 echo 'Backup sugar'
-python $PAVER backup_dir -s $PROJECT -d $BACKUP_DIR >>$BACKUP_DIR/backup.log 2>>$BACKUP_DIR/backup.err.log
+python $PAVER backup_dir -s $PROJECT -d $BACKUP_DIR --recipient "Algo-rithm <info@algo-rithm.com>" >>$BACKUP_DIR/backup.log 2>>$BACKUP_DIR/backup.err.log
 
 PROJECT=/home/seb/web/redmine
 echo 'Backup redmine'
-python $PAVER backup_dir -s $PROJECT -d $BACKUP_DIR >>$BACKUP_DIR/backup.log 2>>$BACKUP_DIR/backup.err.log
+python $PAVER backup_dir -s $PROJECT -d $BACKUP_DIR --recipient "Algo-rithm <info@algo-rithm.com>" >>$BACKUP_DIR/backup.log 2>>$BACKUP_DIR/backup.err.log
 
 echo 'Done'
