@@ -8,6 +8,7 @@
 PAVER=./paver
 MYSQL_BACKUP_DIR=/home/seb/backups/mysql
 BACKUP_DIR=/home/seb/backups/projects
+export GNUPGHOME=/home/seb/.gnupg
 
 cd /home/seb/projects/backup_tools
 

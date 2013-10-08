@@ -10,11 +10,11 @@ import time
 
 def get_stamp():
     """Returns timestamp for backup file names."""
-    return time.strftime('%Y-%m-%d-%H:%M:%S')
+    return time.strftime('%Y-%m-%d-%H-%M-%S')
 
 def get_stamp_regexp(basename, strict=False):
     """Returns regexp to find backup files with the same basename."""
-    rexp = "^(?P<datetime>\d{4}-\d{2}-\d{2}-\d{2}:\d{2}:\d{2})-" + basename
+    rexp = "^(?P<datetime>\d{4}-\d{2}-\d{2}-\d{2}-\d{2}-\d{2})-" + basename
     if strict:
       rexp += "$"
     return re.compile(rexp)
