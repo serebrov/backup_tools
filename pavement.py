@@ -43,7 +43,7 @@ def backup_mysql(options):
              options.src = arc
              gpg = encrypt.gnupg()
              backup.rm_file(arc)
-         backup.rm_old_files(options.dest, db, 28)
+         backup.rm_old_files(options.dest, db, 7)
 
 
 @task
@@ -70,4 +70,4 @@ def backup_dir(options):
         options.src = arc
         gpg = encrypt.gnupg()
         backup.rm_file(arc)
-    backup.rm_old_files(options.dest, options.name, 28)
+    backup.rm_old_files(options.dest, options.name, 7)
