@@ -21,6 +21,15 @@ python $PAVER backup_dir -s $PROJECT -d $BACKUP_DIR --recipient "Algo-rithm <inf
 
 PROJECT=/home/seb/web/redmine
 echo 'Backup redmine'
+python $PAVER backup_dir -s $PROJECT -n 3 -d $BACKUP_DIR --recipient "Algo-rithm <info@algo-rithm.com>" >>$BACKUP_DIR/backup.log 2>>$BACKUP_DIR/backup.err.log
+
+PROJECT=/home/git
+echo 'Backup git server home'
 python $PAVER backup_dir -s $PROJECT -d $BACKUP_DIR --recipient "Algo-rithm <info@algo-rithm.com>" >>$BACKUP_DIR/backup.log 2>>$BACKUP_DIR/backup.err.log
+
+PROJECT=/home/seb/.ssh
+echo 'Backup seb .ssh'
+python $PAVER backup_dir -s $PROJECT -d $BACKUP_DIR --recipient "Algo-rithm <info@algo-rithm.com>" >>$BACKUP_DIR/backup.log 2>>$BACKUP_DIR/backup.err.log
+
 
 echo 'Done'

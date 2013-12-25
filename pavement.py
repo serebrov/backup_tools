@@ -19,6 +19,7 @@ from tasks import encrypt
     optparse.make_option('-d', '--dest', help='Dump file destination'),
     optparse.make_option('--archive_type', default='gz', help='Archive type: gz, bz2 or zip'),
     optparse.make_option('--name', default='backup', help='Backup file name'),
+    optparse.make_option('-n', '--num', default='7', help='Number of backups to keep'),
     optparse.make_option('--recipient', default='', help='gpg --recipient parameter'),
     optparse.make_option('--user', default='', help='gpg --local-user parameter'),
     optparse.make_option('--trust_model', default='always', help='gpg --trust-model parameter.'),
@@ -43,7 +44,7 @@ def backup_mysql(options):
              options.src = arc
              gpg = encrypt.gnupg()
              backup.rm_file(arc)
-         backup.rm_old_files(options.dest, db, 7)
+         backup.rm_old_files(options.dest, db, options.num)
 
 
 @task
@@ -52,6 +53,7 @@ def backup_mysql(options):
     optparse.make_option('-d', '--dest', default='', help='Dump file destination'),
     optparse.make_option('--archive_type', default='gz', help='Archive type: gz, bz2 or zip'),
     optparse.make_option('--name', default='', help='Project name'),
+    optparse.make_option('-n', '--num', default='7', help='Number of backups to keep'),
     optparse.make_option('--recipient', default='', help='gpg --recipient parameter'),
     optparse.make_option('--user', default='', help='gpg --local-user parameter'),
     optparse.make_option('--trust_model', default='always', help='gpg --trust-model parameter.'),
@@ -70,4 +72,4 @@ def backup_dir(options):
         options.src = arc
         gpg = encrypt.gnupg()
         backup.rm_file(arc)
-    backup.rm_old_files(options.dest, options.name, 7)
+    backup.rm_old_files(options.dest, options.name, options.num)
